@@ -3,10 +3,11 @@
 import yfinance as yf
 import pandas as pd
 
+
 stock_symbol = 'ticker'
 interval = '1mo'  
 
-stock_data = yf.download(stock_symbol, start='2023-12-01', end='2024-6-01', interval=interval)
+stock_data = yf.download(stock_symbol, start='2023-01-01', end='2023-10-01', interval=interval)
 
 ticker = yf.Ticker(stock_symbol)
 
@@ -14,7 +15,9 @@ info = ticker.info
 
 additional_metrics = {
     'Metric': [
-        'Price', 'Price (USD)',  'Market Cap', 'Cap Size', 'Income (ttm)', 'Revenue (ttm)',
+        'Price', 'Price (USD)', 'Year on Year Chart', 'Change', 'Change %',
+        'Perf Week', 'Perf Month', 'Perf Quarter', 'Perf Half Year', 'Perf Year',
+        'Perf (ytd)', 'Market Cap', 'Cap Size', 'Income (ttm)', 'Revenue (ttm)',
         'Shares Outstanding', 'Shares Float', 'Book/Sh Book Value Per Share (mrq)',
         'Cash/Sh Cash Per Share (mrq)', 'Insider Ownership Percentage',
         '6-Month Change In Ownership', 'Institutional Ownership Percentage',
@@ -80,7 +83,7 @@ additional_metrics = {
         None,  
         info.get('returnOnAssets', None),
         info.get('returnOnEquity', None),
-        info.get('roi', None), 
+        info.get('roi', None),  
         info.get('grossMargins', None),
         info.get('operatingMargins', None),
         info.get('profitMargins', None),
@@ -108,6 +111,7 @@ additional_metrics = {
     ]
 }
 
+
 metrics_df = pd.DataFrame(additional_metrics)
 
 combined_data = pd.concat([stock_data, metrics_df.set_index('Metric')], axis=1)
@@ -115,7 +119,6 @@ combined_data = pd.concat([stock_data, metrics_df.set_index('Metric')], axis=1)
 combined_data.to_csv(f'{stock_symbol}_financial_data.csv')
 
 print(f'Data for {stock_symbol} saved to {stock_symbol}_financial_data.csv with {interval} interval.')
-
 
 combined_data.to_csv(f'{stock_symbol}_financial_data.csv')
 
